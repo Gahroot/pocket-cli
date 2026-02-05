@@ -42,13 +42,20 @@ type Config struct {
 	SMTPPort      string `json:"smtp_port,omitempty"`
 
 	// Dev
-	GitHubToken string `json:"github_token,omitempty"`
-	GitLabToken string `json:"gitlab_token,omitempty"`
-	LinearToken string `json:"linear_token,omitempty"`
+	GitHubToken     string `json:"github_token,omitempty"`
+	GitLabToken     string `json:"gitlab_token,omitempty"`
+	LinearToken     string `json:"linear_token,omitempty"`
+	JiraURL         string `json:"jira_url,omitempty"`
+	JiraEmail       string `json:"jira_email,omitempty"`
+	JiraToken       string `json:"jira_token,omitempty"`
+	VercelToken     string `json:"vercel_token,omitempty"`
+	CloudflareToken string `json:"cloudflare_token,omitempty"`
 
 	// Productivity
 	NotionToken    string `json:"notion_token,omitempty"`
 	TodoistToken   string `json:"todoist_token,omitempty"`
+	TrelloKey      string `json:"trello_key,omitempty"`
+	TrelloToken    string `json:"trello_token,omitempty"`
 	GoogleCredPath string `json:"google_cred_path,omitempty"`
 
 	// News
@@ -57,6 +64,9 @@ type Config struct {
 	// AI
 	OpenAIKey    string `json:"openai_key,omitempty"`
 	AnthropicKey string `json:"anthropic_key,omitempty"`
+
+	// Utility
+	AlphaVantageKey string `json:"alphavantage_key,omitempty"`
 }
 
 // Path returns the config file path
@@ -171,10 +181,24 @@ func Set(key, value string) error {
 		cfg.GitLabToken = value
 	case "linear_token":
 		cfg.LinearToken = value
+	case "jira_url":
+		cfg.JiraURL = value
+	case "jira_email":
+		cfg.JiraEmail = value
+	case "jira_token":
+		cfg.JiraToken = value
+	case "vercel_token":
+		cfg.VercelToken = value
+	case "cloudflare_token":
+		cfg.CloudflareToken = value
 	case "notion_token":
 		cfg.NotionToken = value
 	case "todoist_token":
 		cfg.TodoistToken = value
+	case "trello_key":
+		cfg.TrelloKey = value
+	case "trello_token":
+		cfg.TrelloToken = value
 	case "google_cred_path":
 		cfg.GoogleCredPath = value
 	case "newsapi_key":
@@ -183,6 +207,8 @@ func Set(key, value string) error {
 		cfg.OpenAIKey = value
 	case "anthropic_key":
 		cfg.AnthropicKey = value
+	case "alphavantage_key":
+		cfg.AlphaVantageKey = value
 	default:
 		return fmt.Errorf("unknown config key: %s", key)
 	}
@@ -242,10 +268,24 @@ func Get(key string) (string, error) {
 		return cfg.GitLabToken, nil
 	case "linear_token":
 		return cfg.LinearToken, nil
+	case "jira_url":
+		return cfg.JiraURL, nil
+	case "jira_email":
+		return cfg.JiraEmail, nil
+	case "jira_token":
+		return cfg.JiraToken, nil
+	case "vercel_token":
+		return cfg.VercelToken, nil
+	case "cloudflare_token":
+		return cfg.CloudflareToken, nil
 	case "notion_token":
 		return cfg.NotionToken, nil
 	case "todoist_token":
 		return cfg.TodoistToken, nil
+	case "trello_key":
+		return cfg.TrelloKey, nil
+	case "trello_token":
+		return cfg.TrelloToken, nil
 	case "google_cred_path":
 		return cfg.GoogleCredPath, nil
 	case "newsapi_key":
@@ -254,6 +294,8 @@ func Get(key string) (string, error) {
 		return cfg.OpenAIKey, nil
 	case "anthropic_key":
 		return cfg.AnthropicKey, nil
+	case "alphavantage_key":
+		return cfg.AlphaVantageKey, nil
 	default:
 		return "", fmt.Errorf("unknown config key: %s", key)
 	}
@@ -293,12 +335,20 @@ func (c *Config) Redacted() map[string]string {
 		"github_token":          redact(c.GitHubToken),
 		"gitlab_token":          redact(c.GitLabToken),
 		"linear_token":          redact(c.LinearToken),
+		"jira_url":              c.JiraURL,
+		"jira_email":            c.JiraEmail,
+		"jira_token":            redact(c.JiraToken),
+		"vercel_token":          redact(c.VercelToken),
+		"cloudflare_token":      redact(c.CloudflareToken),
 		"notion_token":          redact(c.NotionToken),
 		"todoist_token":         redact(c.TodoistToken),
+		"trello_key":            redact(c.TrelloKey),
+		"trello_token":          redact(c.TrelloToken),
 		"google_cred_path":      c.GoogleCredPath,
 		"newsapi_key":           redact(c.NewsAPIKey),
 		"openai_key":            redact(c.OpenAIKey),
 		"anthropic_key":         redact(c.AnthropicKey),
+		"alphavantage_key":      redact(c.AlphaVantageKey),
 	}
 }
 

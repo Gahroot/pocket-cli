@@ -232,6 +232,82 @@ For Yahoo:
 Note: Free tier allows ~10,000 units/day (search=100, video=1, channel=1)`,
 		TestCommand: "pocket social youtube trending -l 1",
 	},
+	"alphavantage": {
+		Service: "alphavantage",
+		Name:    "Alpha Vantage (Stocks)",
+		Keys: []KeyInfo{
+			{Key: "alphavantage_key", Description: "API key for stock market data", Required: true},
+		},
+		SetupGuide: `1. Go to https://www.alphavantage.co/support/#api-key
+2. Enter your email to get a free API key
+3. Copy the API key from email
+4. Run: pocket config set alphavantage_key <your-api-key>
+
+Note: Free tier allows 25 requests/day, 5/min`,
+		TestCommand: "pocket utility stocks quote AAPL",
+	},
+	"jira": {
+		Service: "jira",
+		Name:    "Jira",
+		Keys: []KeyInfo{
+			{Key: "jira_url", Description: "Jira instance URL", Required: true, Example: "https://mycompany.atlassian.net"},
+			{Key: "jira_email", Description: "Your Atlassian email", Required: true, Example: "you@company.com"},
+			{Key: "jira_token", Description: "API token", Required: true},
+		},
+		SetupGuide: `1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
+2. Click "Create API token"
+3. Give it a label and create
+4. Copy the token
+5. Run these commands:
+   pocket config set jira_url https://yourcompany.atlassian.net
+   pocket config set jira_email your@email.com
+   pocket config set jira_token <your-api-token>`,
+		TestCommand: "pocket dev jira projects",
+	},
+	"cloudflare": {
+		Service: "cloudflare",
+		Name:    "Cloudflare",
+		Keys: []KeyInfo{
+			{Key: "cloudflare_token", Description: "API token with Zone permissions", Required: true},
+		},
+		SetupGuide: `1. Go to https://dash.cloudflare.com/profile/api-tokens
+2. Click "Create Token"
+3. Use template "Edit zone DNS" or create custom with:
+   - Zone:DNS:Edit, Zone:Zone:Read permissions
+4. Copy the token
+5. Run: pocket config set cloudflare_token <your-token>`,
+		TestCommand: "pocket dev cloudflare zones",
+	},
+	"vercel": {
+		Service: "vercel",
+		Name:    "Vercel",
+		Keys: []KeyInfo{
+			{Key: "vercel_token", Description: "Personal access token", Required: true},
+		},
+		SetupGuide: `1. Go to https://vercel.com/account/tokens
+2. Click "Create"
+3. Give it a name and set expiration
+4. Copy the token
+5. Run: pocket config set vercel_token <your-token>`,
+		TestCommand: "pocket dev vercel projects",
+	},
+	"trello": {
+		Service: "trello",
+		Name:    "Trello",
+		Keys: []KeyInfo{
+			{Key: "trello_key", Description: "API Key", Required: true},
+			{Key: "trello_token", Description: "API Token", Required: true},
+		},
+		SetupGuide: `1. Go to https://trello.com/power-ups/admin
+2. Click "New" to create a Power-Up (or use existing)
+3. Copy the API Key
+4. Click "Token" link next to the key to generate a token
+5. Authorize and copy the token
+6. Run:
+   pocket config set trello_key <your-api-key>
+   pocket config set trello_token <your-token>`,
+		TestCommand: "pocket productivity trello boards",
+	},
 }
 
 func NewSetupCmd() *cobra.Command {

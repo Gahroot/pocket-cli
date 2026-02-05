@@ -97,6 +97,64 @@ var allIntegrations = []Integration{
 		AuthNeeded:  false,
 		Commands:    []string{"pocket utility ip me", "pocket utility ip lookup [ip]"},
 	},
+	{
+		ID:          "domain",
+		Name:        "DNS/WHOIS/SSL",
+		Group:       "utility",
+		Description: "DNS lookups, WHOIS domain info, and SSL certificate inspection",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility domain dns [domain]", "pocket utility domain whois [domain]", "pocket utility domain ssl [domain]"},
+	},
+	{
+		ID:          "currency",
+		Name:        "Currency Exchange",
+		Group:       "utility",
+		Description: "Real-time currency exchange rates and conversion",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility currency rate [from] [to]", "pocket utility currency convert [amount] [from] [to]", "pocket utility currency list"},
+	},
+	{
+		ID:          "wayback",
+		Name:        "Wayback Machine",
+		Group:       "utility",
+		Description: "Check archived versions of websites via Internet Archive",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility wayback check [url]", "pocket utility wayback latest [url]", "pocket utility wayback snapshots [url]"},
+	},
+	{
+		ID:          "holidays",
+		Name:        "Public Holidays",
+		Group:       "utility",
+		Description: "Public holidays by country and year",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility holidays list [country] [year]", "pocket utility holidays next [country]", "pocket utility holidays countries"},
+	},
+	{
+		ID:          "translate",
+		Name:        "Translation",
+		Group:       "utility",
+		Description: "Translate text between languages",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility translate text [text] --from [lang] --to [lang]", "pocket utility translate languages"},
+	},
+	{
+		ID:          "urlshort",
+		Name:        "URL Shortener",
+		Group:       "utility",
+		Description: "Shorten and expand URLs",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility url shorten [url]", "pocket utility url expand [short-url]"},
+	},
+	// Utility - Auth Required
+	{
+		ID:          "stocks",
+		Name:        "Stock Market",
+		Group:       "utility",
+		Description: "Stock quotes, search, and company info via Alpha Vantage",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket utility stocks quote [symbol]", "pocket utility stocks search [query]", "pocket utility stocks info [symbol]"},
+		SetupCmd:    "pocket setup show alphavantage",
+	},
 
 	// Dev - No Auth
 	{
@@ -114,6 +172,14 @@ var allIntegrations = []Integration{
 		Description: "Search Python packages, get info, versions, and dependencies",
 		AuthNeeded:  false,
 		Commands:    []string{"pocket dev pypi search [query]", "pocket dev pypi info [package]", "pocket dev pypi versions [package]", "pocket dev pypi deps [package]"},
+	},
+	{
+		ID:          "dockerhub",
+		Name:        "Docker Hub",
+		Group:       "dev",
+		Description: "Search Docker images, get tags, and inspect manifests",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket dev dockerhub search [query]", "pocket dev dockerhub image [name]", "pocket dev dockerhub tags [name]", "pocket dev dockerhub inspect [name:tag]"},
 	},
 
 	// Dev - Auth Required
@@ -143,6 +209,33 @@ var allIntegrations = []Integration{
 		AuthNeeded:  true,
 		Commands:    []string{"pocket dev linear issues", "pocket dev linear teams", "pocket dev linear create [desc]"},
 		SetupCmd:    "pocket setup show linear",
+	},
+	{
+		ID:          "jira",
+		Name:        "Jira",
+		Group:       "dev",
+		Description: "Issues, projects, and sprint management with Atlassian Jira",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev jira issues", "pocket dev jira issue [key]", "pocket dev jira projects", "pocket dev jira create [summary]", "pocket dev jira transition [key] [status]"},
+		SetupCmd:    "pocket setup show jira",
+	},
+	{
+		ID:          "cloudflare",
+		Name:        "Cloudflare",
+		Group:       "dev",
+		Description: "DNS, zones, cache purge, and analytics via Cloudflare",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev cloudflare zones", "pocket dev cloudflare zone [id]", "pocket dev cloudflare dns [zone-id]", "pocket dev cloudflare purge [zone-id]", "pocket dev cloudflare analytics [zone-id]"},
+		SetupCmd:    "pocket setup show cloudflare",
+	},
+	{
+		ID:          "vercel",
+		Name:        "Vercel",
+		Group:       "dev",
+		Description: "Projects, deployments, domains, and environment variables on Vercel",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev vercel projects", "pocket dev vercel project [name]", "pocket dev vercel deployments [project]", "pocket dev vercel domains", "pocket dev vercel env [project]"},
+		SetupCmd:    "pocket setup show vercel",
 	},
 
 	// Social - Auth Required
@@ -248,6 +341,15 @@ var allIntegrations = []Integration{
 		AuthNeeded:  true,
 		Commands:    []string{"pocket productivity todoist tasks", "pocket productivity todoist projects", "pocket productivity todoist add [task]", "pocket productivity todoist complete [id]"},
 		SetupCmd:    "pocket setup show todoist",
+	},
+	{
+		ID:          "trello",
+		Name:        "Trello",
+		Group:       "productivity",
+		Description: "Boards, lists, and cards in Trello",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket productivity trello boards", "pocket productivity trello board [id]", "pocket productivity trello cards [board-id]", "pocket productivity trello card [id]", "pocket productivity trello create [name]"},
+		SetupCmd:    "pocket setup show trello",
 	},
 
 	// AI - Auth Required
@@ -474,6 +576,31 @@ func getIntegrationStatus(cfg *config.Config, integ Integration) string {
 		}
 	case "newsapi":
 		if v, _ := config.Get("newsapi_key"); v != "" {
+			return "ready"
+		}
+	case "stocks":
+		if v, _ := config.Get("alphavantage_key"); v != "" {
+			return "ready"
+		}
+	case "jira":
+		url, _ := config.Get("jira_url")
+		email, _ := config.Get("jira_email")
+		token, _ := config.Get("jira_token")
+		if url != "" && email != "" && token != "" {
+			return "ready"
+		}
+	case "cloudflare":
+		if v, _ := config.Get("cloudflare_token"); v != "" {
+			return "ready"
+		}
+	case "vercel":
+		if v, _ := config.Get("vercel_token"); v != "" {
+			return "ready"
+		}
+	case "trello":
+		key, _ := config.Get("trello_key")
+		token, _ := config.Get("trello_token")
+		if key != "" && token != "" {
 			return "ready"
 		}
 	}
