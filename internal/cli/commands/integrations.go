@@ -477,6 +477,14 @@ var allIntegrations = []Integration{
 		Commands:    []string{"pocket system clipboard get", "pocket system clipboard set [text]", "pocket system clipboard clear", "pocket system clipboard copy [file]"},
 	},
 	{
+		ID:          "imessage",
+		Name:        "iMessage",
+		Group:       "system",
+		Description: "Send and read iMessages via Messages.app (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system imessage send [recipient] [message]", "pocket system imessage chats", "pocket system imessage read [contact]", "pocket system imessage search [query]", "pocket system imessage unread"},
+	},
+	{
 		ID:          "apple-mail",
 		Name:        "Apple Mail",
 		Group:       "system",

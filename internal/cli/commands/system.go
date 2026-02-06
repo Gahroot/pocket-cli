@@ -6,6 +6,7 @@ import (
 	"github.com/unstablemind/pocket/internal/system/clipboard"
 	"github.com/unstablemind/pocket/internal/system/contacts"
 	"github.com/unstablemind/pocket/internal/system/finder"
+	"github.com/unstablemind/pocket/internal/system/imessage"
 	"github.com/unstablemind/pocket/internal/system/mail"
 	"github.com/unstablemind/pocket/internal/system/notes"
 	"github.com/unstablemind/pocket/internal/system/reminders"
@@ -17,13 +18,14 @@ func NewSystemCmd() *cobra.Command {
 		Use:     "system",
 		Aliases: []string{"sys"},
 		Short:   "System commands",
-		Long:    `System-level integrations: Apple Notes, Calendar, Reminders, Contacts, Finder, Safari, Mail, Clipboard (macOS only).`,
+		Long:    `System-level integrations: Apple Notes, Calendar, Reminders, Contacts, Finder, Safari, Mail, Clipboard, iMessage (macOS only).`,
 	}
 
 	cmd.AddCommand(calendar.NewCmd())
 	cmd.AddCommand(clipboard.NewCmd())
 	cmd.AddCommand(contacts.NewCmd())
 	cmd.AddCommand(finder.NewCmd())
+	cmd.AddCommand(imessage.NewCmd())
 	cmd.AddCommand(mail.NewCmd())
 	cmd.AddCommand(notes.NewCmd())
 	cmd.AddCommand(reminders.NewCmd())
