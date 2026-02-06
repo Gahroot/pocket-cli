@@ -74,6 +74,16 @@ type Config struct {
 	// Push Notifications
 	PushoverToken string `json:"pushover_token,omitempty"`
 	PushoverUser  string `json:"pushover_user,omitempty"`
+
+	// Logseq
+	LogseqGraph  string `json:"logseq_graph,omitempty"`
+	LogseqGraphs string `json:"logseq_graphs,omitempty"`
+	LogseqFormat string `json:"logseq_format,omitempty"`
+
+	// Obsidian
+	ObsidianVault       string `json:"obsidian_vault,omitempty"`
+	ObsidianVaults      string `json:"obsidian_vaults,omitempty"`
+	ObsidianDailyFormat string `json:"obsidian_daily_format,omitempty"`
 }
 
 // Path returns the config file path
@@ -226,6 +236,18 @@ func Set(key, value string) error {
 		cfg.PushoverToken = value
 	case "pushover_user":
 		cfg.PushoverUser = value
+	case "logseq_graph":
+		cfg.LogseqGraph = value
+	case "logseq_graphs":
+		cfg.LogseqGraphs = value
+	case "logseq_format":
+		cfg.LogseqFormat = value
+	case "obsidian_vault":
+		cfg.ObsidianVault = value
+	case "obsidian_vaults":
+		cfg.ObsidianVaults = value
+	case "obsidian_daily_format":
+		cfg.ObsidianDailyFormat = value
 	default:
 		return fmt.Errorf("unknown config key: %s", key)
 	}
@@ -323,6 +345,18 @@ func Get(key string) (string, error) {
 		return cfg.PushoverToken, nil
 	case "pushover_user":
 		return cfg.PushoverUser, nil
+	case "logseq_graph":
+		return cfg.LogseqGraph, nil
+	case "logseq_graphs":
+		return cfg.LogseqGraphs, nil
+	case "logseq_format":
+		return cfg.LogseqFormat, nil
+	case "obsidian_vault":
+		return cfg.ObsidianVault, nil
+	case "obsidian_vaults":
+		return cfg.ObsidianVaults, nil
+	case "obsidian_daily_format":
+		return cfg.ObsidianDailyFormat, nil
 	default:
 		return "", fmt.Errorf("unknown config key: %s", key)
 	}
@@ -381,6 +415,12 @@ func (c *Config) Redacted() map[string]string {
 		"alphavantage_key":      redact(c.AlphaVantageKey),
 		"pushover_token":        redact(c.PushoverToken),
 		"pushover_user":         redact(c.PushoverUser),
+		"logseq_graph":          c.LogseqGraph,
+		"logseq_graphs":         c.LogseqGraphs,
+		"logseq_format":         c.LogseqFormat,
+		"obsidian_vault":        c.ObsidianVault,
+		"obsidian_vaults":       c.ObsidianVaults,
+		"obsidian_daily_format": c.ObsidianDailyFormat,
 	}
 }
 

@@ -377,6 +377,16 @@ var allIntegrations = []Integration{
 		Commands:    []string{"pocket productivity trello boards", "pocket productivity trello board [id]", "pocket productivity trello cards [board-id]", "pocket productivity trello card [id]", "pocket productivity trello create [name]"},
 		SetupCmd:    "pocket setup show trello",
 	},
+	// Productivity - Local (Path Required)
+	{
+		ID:          "logseq",
+		Name:        "Logseq",
+		Group:       "productivity",
+		Description: "Local Logseq graphs - read/write pages, search, journals",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket productivity logseq graphs", "pocket productivity logseq pages", "pocket productivity logseq read [page]", "pocket productivity logseq write [page] [content]", "pocket productivity logseq search [query]", "pocket productivity logseq journal", "pocket productivity logseq recent"},
+		SetupCmd:    "pocket setup show logseq",
+	},
 
 	// AI - Auth Required
 	{
@@ -396,6 +406,83 @@ var allIntegrations = []Integration{
 		AuthNeeded:  true,
 		Commands:    []string{"pocket ai anthropic chat [prompt]"},
 		SetupCmd:    "pocket setup show anthropic",
+	},
+
+	// Productivity - Local (Path Required)
+	{
+		ID:          "obsidian",
+		Name:        "Obsidian",
+		Group:       "productivity",
+		Description: "Local Obsidian vaults - read/write notes, search, daily notes",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket productivity obsidian vaults", "pocket productivity obsidian notes", "pocket productivity obsidian read [note]", "pocket productivity obsidian write [note] [content]", "pocket productivity obsidian search [query]", "pocket productivity obsidian daily", "pocket productivity obsidian recent"},
+		SetupCmd:    "pocket setup show obsidian",
+	},
+
+	// System - macOS Only (No Auth)
+	{
+		ID:          "reminders",
+		Name:        "Apple Reminders",
+		Group:       "system",
+		Description: "Manage Apple Reminders via AppleScript (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system reminders lists", "pocket system reminders list [name]", "pocket system reminders add [title]", "pocket system reminders complete [id]", "pocket system reminders delete [id]", "pocket system reminders today", "pocket system reminders overdue"},
+	},
+	{
+		ID:          "notes",
+		Name:        "Apple Notes",
+		Group:       "system",
+		Description: "Read and manage Apple Notes via AppleScript (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system notes folders", "pocket system notes list", "pocket system notes read [name]", "pocket system notes search [query]", "pocket system notes create [name] [body]", "pocket system notes append [name] [text]"},
+	},
+	{
+		ID:          "apple-calendar",
+		Name:        "Apple Calendar",
+		Group:       "system",
+		Description: "Manage Apple Calendar events via AppleScript (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system calendar calendars", "pocket system calendar today", "pocket system calendar events", "pocket system calendar event [title]", "pocket system calendar create [title]", "pocket system calendar upcoming", "pocket system calendar week"},
+	},
+	{
+		ID:          "contacts",
+		Name:        "Apple Contacts",
+		Group:       "system",
+		Description: "Search and manage Apple Contacts via AppleScript (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system contacts list", "pocket system contacts search [query]", "pocket system contacts get [name]", "pocket system contacts groups", "pocket system contacts group [name]", "pocket system contacts create [name]"},
+	},
+	{
+		ID:          "finder",
+		Name:        "Finder",
+		Group:       "system",
+		Description: "Finder operations, file info, tags, Spotlight search (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system finder open [path]", "pocket system finder reveal [path]", "pocket system finder info [path]", "pocket system finder list [path]", "pocket system finder tags [path]", "pocket system finder tag [path] [tag]", "pocket system finder trash [path]", "pocket system finder search [query]"},
+	},
+	{
+		ID:          "safari",
+		Name:        "Safari",
+		Group:       "system",
+		Description: "Safari tabs, bookmarks, reading list, history (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system safari tabs", "pocket system safari url", "pocket system safari open [url]", "pocket system safari bookmarks", "pocket system safari reading-list", "pocket system safari add-reading [url]", "pocket system safari history"},
+	},
+	{
+		ID:          "clipboard",
+		Name:        "Clipboard",
+		Group:       "system",
+		Description: "Get/set macOS clipboard content (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system clipboard get", "pocket system clipboard set [text]", "pocket system clipboard clear", "pocket system clipboard copy [file]"},
+	},
+	{
+		ID:          "apple-mail",
+		Name:        "Apple Mail",
+		Group:       "system",
+		Description: "Read and send emails via Apple Mail (macOS only)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket system mail accounts", "pocket system mail mailboxes", "pocket system mail list", "pocket system mail read [id]", "pocket system mail search [query]", "pocket system mail send", "pocket system mail unread", "pocket system mail count"},
 	},
 }
 
@@ -491,6 +578,7 @@ func newIntGroupCmd() *cobra.Command {
 				"comms":        {Name: "Comms", Desc: "Email and messaging", Count: 0},
 				"productivity": {Name: "Productivity", Desc: "Calendar, tasks, notes", Count: 0},
 				"ai":           {Name: "AI", Desc: "AI/LLM providers", Count: 0},
+				"system":       {Name: "System", Desc: "macOS system integrations", Count: 0},
 			}
 
 			for _, integ := range allIntegrations {
@@ -516,6 +604,7 @@ func newIntGroupCmd() *cobra.Command {
 				{ID: "comms", Name: groups["comms"].Name, Desc: groups["comms"].Desc, Count: groups["comms"].Count},
 				{ID: "productivity", Name: groups["productivity"].Name, Desc: groups["productivity"].Desc, Count: groups["productivity"].Count},
 				{ID: "ai", Name: groups["ai"].Name, Desc: groups["ai"].Desc, Count: groups["ai"].Count},
+				{ID: "system", Name: groups["system"].Name, Desc: groups["system"].Desc, Count: groups["system"].Count},
 			}
 
 			return output.Print(result)
@@ -634,6 +723,14 @@ func getIntegrationStatus(cfg *config.Config, integ Integration) string {
 		key, _ := config.Get("trello_key")
 		token, _ := config.Get("trello_token")
 		if key != "" && token != "" {
+			return "ready"
+		}
+	case "logseq":
+		if v, _ := config.Get("logseq_graph"); v != "" {
+			return "ready"
+		}
+	case "obsidian":
+		if v, _ := config.Get("obsidian_vault"); v != "" {
 			return "ready"
 		}
 	}

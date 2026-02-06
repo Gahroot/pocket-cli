@@ -349,6 +349,60 @@ Note: Pushover has a one-time $5 purchase for each platform.
 After setup, use: pocket comms notify pushover "Your message"`,
 		TestCommand: "pocket comms notify pushover 'Test notification from Pocket CLI'",
 	},
+	"obsidian": {
+		Service: "obsidian",
+		Name:    "Obsidian",
+		Keys: []KeyInfo{
+			{Key: "obsidian_vault", Description: "Path to default Obsidian vault", Required: true, Example: "/Users/you/Documents/MyVault"},
+			{Key: "obsidian_vaults", Description: "JSON array of additional vaults (optional)", Required: false, Example: `[{"name":"work","path":"/path/to/work"}]`},
+			{Key: "obsidian_daily_format", Description: "Daily note date format (default: 2006-01-02)", Required: false, Example: "2006-01-02"},
+		},
+		SetupGuide: `Obsidian works with local markdown vaults. No API key required.
+
+1. Find your Obsidian vault path (the folder containing your .obsidian directory)
+2. Run: pocket config set obsidian_vault /path/to/your/vault
+
+Optional - Multiple vaults:
+   pocket config set obsidian_vaults '[{"name":"work","path":"/path/to/work"},{"name":"personal","path":"/path/to/personal"}]'
+
+Optional - Custom daily note format (Go date format):
+   pocket config set obsidian_daily_format "2006-01-02"
+
+Common daily note formats:
+   2006-01-02      -> 2024-01-15
+   01-02-2006      -> 01-15-2024
+   2006/01/02      -> 2024/01/15
+   January 2, 2006 -> January 15, 2024`,
+		TestCommand: "pocket productivity obsidian vaults",
+	},
+	"logseq": {
+		Service: "logseq",
+		Name:    "Logseq",
+		Keys: []KeyInfo{
+			{Key: "logseq_graph", Description: "Path to default Logseq graph", Required: true, Example: "/Users/you/Documents/logseq-graph"},
+			{Key: "logseq_graphs", Description: "JSON array of additional graphs (optional)", Required: false, Example: `[{"name":"work","path":"/path/to/work","format":"md"}]`},
+			{Key: "logseq_format", Description: "File format: md or org (default: md)", Required: false, Example: "md"},
+		},
+		SetupGuide: `Logseq works with local graphs (markdown/org files). No API key required.
+
+1. Find your Logseq graph path (the folder containing pages/ and journals/ directories)
+2. Run: pocket config set logseq_graph /path/to/your/graph
+
+Optional - Set file format (md or org):
+   pocket config set logseq_format md
+
+Optional - Multiple graphs:
+   pocket config set logseq_graphs '[{"name":"work","path":"/path/to/work","format":"md"},{"name":"personal","path":"/path/to/personal","format":"org"}]'
+
+Graph structure:
+   your-graph/
+   ├── pages/          # Regular pages
+   ├── journals/       # Daily journal entries (YYYY_MM_DD.md)
+   └── logseq/         # Logseq config (not used by CLI)
+
+Page names with special characters (/, :, ?) are URL-encoded in filenames.`,
+		TestCommand: "pocket productivity logseq graphs",
+	},
 }
 
 func NewSetupCmd() *cobra.Command {
