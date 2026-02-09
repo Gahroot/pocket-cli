@@ -145,10 +145,3 @@ func printTable(data any) error {
 	}
 	return nil
 }
-
-// Verbose prints only in verbose mode
-func Verbose(format string, args ...any) {
-	if verbose {
-		fmt.Fprintf(os.Stderr, format+"\n", args...)
-	}
-}

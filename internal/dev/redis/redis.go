@@ -123,7 +123,16 @@ func sendCommand(conn net.Conn, reader *bufio.Reader, args ...string) (string, e
 	return readResponse(reader)
 }
 
+const maxRESPDepth = 64
+
 func readResponse(reader *bufio.Reader) (string, error) {
+	return readResponseDepth(reader, 0)
+}
+
+func readResponseDepth(reader *bufio.Reader, depth int) (string, error) {
+	if depth > maxRESPDepth {
+		return "", fmt.Errorf("RESP nesting depth exceeded maximum of %d", maxRESPDepth)
+	}
 	line, err := reader.ReadString('\n')
 	if err != nil {
 		return "", fmt.Errorf("read failed: %w", err)
@@ -177,7 +186,7 @@ func readResponse(reader *bufio.Reader) (string, error) {
 		}
 		var parts []string
 		for i := 0; i < count; i++ {
-			element, err := readResponse(reader)
+			element, err := readResponseDepth(reader, depth+1)
 			if err != nil {
 				return "", err
 			}

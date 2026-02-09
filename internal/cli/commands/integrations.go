@@ -620,7 +620,7 @@ func getIntegrationStatus(cfg *config.Config, integ Integration) string {
 			return "ready"
 		}
 	case "twitter":
-		if v, _ := config.Get("x_api_key"); v != "" {
+		if v, _ := config.Get("x_client_id"); v != "" {
 			return "ready"
 		}
 	case "reddit":

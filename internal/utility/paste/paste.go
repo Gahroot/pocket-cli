@@ -169,7 +169,7 @@ func getPaste(pasteURL string) error {
 	req.Header.Set("User-Agent", "Pocket-CLI/1.0")
 
 	// Use a separate client that follows redirects for GET
-	getClient := &http.Client{}
+	getClient := &http.Client{Timeout: 30 * time.Second}
 	resp, err := getClient.Do(req)
 	if err != nil {
 		return output.PrintError("fetch_failed", err.Error(), nil)

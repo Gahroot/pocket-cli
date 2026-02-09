@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -849,34 +848,4 @@ func newSearchCmd() *cobra.Command {
 	cmd.Flags().IntVarP(&limit, "limit", "l", 50, "Limit number of results (default 50)")
 
 	return cmd
-}
-
-// parseMdlsOutput parses mdls output for a single attribute
-func parseMdlsOutput(output, attrName string) string {
-	lines := strings.Split(output, "\n")
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, attrName) {
-			parts := strings.SplitN(line, "=", 2)
-			if len(parts) == 2 {
-				value := strings.TrimSpace(parts[1])
-				value = strings.Trim(value, "\"")
-				if value == "(null)" {
-					return ""
-				}
-				return value
-			}
-		}
-	}
-	return ""
-}
-
-// parseSize parses a size string from mdls
-func parseSize(s string) int64 {
-	s = strings.TrimSpace(s)
-	if s == "" || s == "(null)" {
-		return 0
-	}
-	size, _ := strconv.ParseInt(s, 10, 64)
-	return size
 }

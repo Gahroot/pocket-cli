@@ -561,7 +561,9 @@ func newReplyCmd() *cobra.Command {
 				if err != nil {
 					return output.PrintError("send_failed", err.Error(), nil)
 				}
-				w.Close()
+				if err = w.Close(); err != nil {
+					return output.PrintError("send_failed", err.Error(), nil)
+				}
 				smtpClient.Quit()
 			} else {
 				sendErr = smtp.SendMail(addr, auth, emailAddr, recipients, msgBuf.Bytes())

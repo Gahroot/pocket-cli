@@ -19,7 +19,7 @@ import (
 const baseURL = "https://api.stackexchange.com/2.3"
 
 var (
-	httpClient = &http.Client{}
+	httpClient = &http.Client{Timeout: 30 * time.Second}
 	htmlTagRe  = regexp.MustCompile(`<[^>]*>`)
 )
 

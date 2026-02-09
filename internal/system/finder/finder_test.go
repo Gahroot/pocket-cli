@@ -74,68 +74,6 @@ func TestResolvePathTildeOnly(t *testing.T) {
 	}
 }
 
-func TestParseMdlsOutput(t *testing.T) {
-	tests := []struct {
-		output   string
-		attrName string
-		want     string
-	}{
-		{
-			"kMDItemContentType = \"public.plain-text\"",
-			"kMDItemContentType",
-			"public.plain-text",
-		},
-		{
-			"kMDItemContentType = (null)",
-			"kMDItemContentType",
-			"",
-		},
-		{
-			"kMDItemDisplayName = \"test.txt\"",
-			"kMDItemDisplayName",
-			"test.txt",
-		},
-		{
-			"kMDItemFoo = \"bar\"\nkMDItemBaz = \"qux\"",
-			"kMDItemBaz",
-			"qux",
-		},
-		{
-			"",
-			"anything",
-			"",
-		},
-	}
-
-	for _, tt := range tests {
-		got := parseMdlsOutput(tt.output, tt.attrName)
-		if got != tt.want {
-			t.Errorf("parseMdlsOutput(%q, %q) = %q, want %q", tt.output, tt.attrName, got, tt.want)
-		}
-	}
-}
-
-func TestParseSize(t *testing.T) {
-	tests := []struct {
-		input string
-		want  int64
-	}{
-		{"1024", 1024},
-		{"0", 0},
-		{"", 0},
-		{"(null)", 0},
-		{"  1234  ", 1234},
-		{"abc", 0},
-	}
-
-	for _, tt := range tests {
-		got := parseSize(tt.input)
-		if got != tt.want {
-			t.Errorf("parseSize(%q) = %d, want %d", tt.input, got, tt.want)
-		}
-	}
-}
-
 func TestEscapeAppleScript(t *testing.T) {
 	tests := []struct {
 		input string

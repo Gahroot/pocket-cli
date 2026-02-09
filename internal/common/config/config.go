@@ -18,15 +18,17 @@ var (
 // Config holds all configuration
 type Config struct {
 	// Social
-	TwitterAPIKey       string `json:"twitter_api_key,omitempty"`
-	TwitterAPISecret    string `json:"twitter_api_secret,omitempty"`
-	TwitterAccessToken  string `json:"twitter_access_token,omitempty"`
-	TwitterAccessSecret string `json:"twitter_access_secret,omitempty"`
-	RedditClientID      string `json:"reddit_client_id,omitempty"`
-	RedditClientSecret  string `json:"reddit_client_secret,omitempty"`
-	MastodonServer      string `json:"mastodon_server,omitempty"`
-	MastodonToken       string `json:"mastodon_token,omitempty"`
-	YouTubeAPIKey       string `json:"youtube_api_key,omitempty"`
+	XClientID          string `json:"x_client_id,omitempty"`
+	XAccessToken       string `json:"x_access_token,omitempty"`
+	XRefreshToken      string `json:"x_refresh_token,omitempty"`
+	XTokenExpiry       string `json:"x_token_expiry,omitempty"`
+	RedditClientID     string `json:"reddit_client_id,omitempty"`
+	RedditAccessToken  string `json:"reddit_access_token,omitempty"`
+	RedditRefreshToken string `json:"reddit_refresh_token,omitempty"`
+	RedditTokenExpiry  string `json:"reddit_token_expiry,omitempty"`
+	MastodonServer     string `json:"mastodon_server,omitempty"`
+	MastodonToken      string `json:"mastodon_token,omitempty"`
+	YouTubeAPIKey      string `json:"youtube_api_key,omitempty"`
 
 	// Communication
 	SlackToken    string `json:"slack_token,omitempty"`
@@ -47,6 +49,7 @@ type Config struct {
 	// Dev
 	GitHubToken     string `json:"github_token,omitempty"`
 	GitLabToken     string `json:"gitlab_token,omitempty"`
+	GitLabURL       string `json:"gitlab_url,omitempty"`
 	LinearToken     string `json:"linear_token,omitempty"`
 	JiraURL         string `json:"jira_url,omitempty"`
 	JiraEmail       string `json:"jira_email,omitempty"`
@@ -61,12 +64,15 @@ type Config struct {
 	PrometheusToken string `json:"prometheus_token,omitempty"`
 
 	// Productivity
-	NotionToken    string `json:"notion_token,omitempty"`
-	TodoistToken   string `json:"todoist_token,omitempty"`
-	TrelloKey      string `json:"trello_key,omitempty"`
-	TrelloToken    string `json:"trello_token,omitempty"`
-	GoogleCredPath string `json:"google_cred_path,omitempty"`
-	GoogleAPIKey   string `json:"google_api_key,omitempty"`
+	NotionToken        string `json:"notion_token,omitempty"`
+	TodoistToken       string `json:"todoist_token,omitempty"`
+	TrelloKey          string `json:"trello_key,omitempty"`
+	TrelloToken        string `json:"trello_token,omitempty"`
+	GoogleCredPath     string `json:"google_cred_path,omitempty"`
+	GoogleAPIKey       string `json:"google_api_key,omitempty"`
+	GoogleClientID     string `json:"google_client_id,omitempty"`
+	GoogleClientSecret string `json:"google_client_secret,omitempty"`
+	GoogleRefreshToken string `json:"google_refresh_token,omitempty"`
 
 	// AWS / S3
 	AWSProfile string `json:"aws_profile,omitempty"`
@@ -81,6 +87,9 @@ type Config struct {
 
 	// Utility
 	AlphaVantageKey string `json:"alphavantage_key,omitempty"`
+
+	// Security
+	VirusTotalAPIKey string `json:"virustotal_api_key,omitempty"`
 
 	// Push Notifications
 	PushoverToken string `json:"pushover_token,omitempty"`
@@ -167,18 +176,22 @@ func Set(key, value string) error {
 	key = normalizeKey(key)
 
 	switch key {
-	case "twitter_api_key":
-		cfg.TwitterAPIKey = value
-	case "twitter_api_secret":
-		cfg.TwitterAPISecret = value
-	case "twitter_access_token":
-		cfg.TwitterAccessToken = value
-	case "twitter_access_secret":
-		cfg.TwitterAccessSecret = value
+	case "x_client_id":
+		cfg.XClientID = value
+	case "x_access_token":
+		cfg.XAccessToken = value
+	case "x_refresh_token":
+		cfg.XRefreshToken = value
+	case "x_token_expiry":
+		cfg.XTokenExpiry = value
 	case "reddit_client_id":
 		cfg.RedditClientID = value
-	case "reddit_client_secret":
-		cfg.RedditClientSecret = value
+	case "reddit_access_token":
+		cfg.RedditAccessToken = value
+	case "reddit_refresh_token":
+		cfg.RedditRefreshToken = value
+	case "reddit_token_expiry":
+		cfg.RedditTokenExpiry = value
 	case "mastodon_server":
 		cfg.MastodonServer = value
 	case "mastodon_token":
@@ -213,6 +226,8 @@ func Set(key, value string) error {
 		cfg.GitHubToken = value
 	case "gitlab_token":
 		cfg.GitLabToken = value
+	case "gitlab_url":
+		cfg.GitLabURL = value
 	case "linear_token":
 		cfg.LinearToken = value
 	case "jira_url":
@@ -249,6 +264,14 @@ func Set(key, value string) error {
 		cfg.GoogleCredPath = value
 	case "google_api_key":
 		cfg.GoogleAPIKey = value
+	case "google_client_id":
+		cfg.GoogleClientID = value
+	case "google_client_secret":
+		cfg.GoogleClientSecret = value
+	case "google_refresh_token":
+		cfg.GoogleRefreshToken = value
+	case "virustotal_api_key":
+		cfg.VirusTotalAPIKey = value
 	case "aws_profile":
 		cfg.AWSProfile = value
 	case "aws_region":
@@ -294,18 +317,22 @@ func Get(key string) (string, error) {
 	key = normalizeKey(key)
 
 	switch key {
-	case "twitter_api_key":
-		return cfg.TwitterAPIKey, nil
-	case "twitter_api_secret":
-		return cfg.TwitterAPISecret, nil
-	case "twitter_access_token":
-		return cfg.TwitterAccessToken, nil
-	case "twitter_access_secret":
-		return cfg.TwitterAccessSecret, nil
+	case "x_client_id":
+		return cfg.XClientID, nil
+	case "x_access_token":
+		return cfg.XAccessToken, nil
+	case "x_refresh_token":
+		return cfg.XRefreshToken, nil
+	case "x_token_expiry":
+		return cfg.XTokenExpiry, nil
 	case "reddit_client_id":
 		return cfg.RedditClientID, nil
-	case "reddit_client_secret":
-		return cfg.RedditClientSecret, nil
+	case "reddit_access_token":
+		return cfg.RedditAccessToken, nil
+	case "reddit_refresh_token":
+		return cfg.RedditRefreshToken, nil
+	case "reddit_token_expiry":
+		return cfg.RedditTokenExpiry, nil
 	case "mastodon_server":
 		return cfg.MastodonServer, nil
 	case "mastodon_token":
@@ -340,6 +367,8 @@ func Get(key string) (string, error) {
 		return cfg.GitHubToken, nil
 	case "gitlab_token":
 		return cfg.GitLabToken, nil
+	case "gitlab_url":
+		return cfg.GitLabURL, nil
 	case "linear_token":
 		return cfg.LinearToken, nil
 	case "jira_url":
@@ -376,6 +405,14 @@ func Get(key string) (string, error) {
 		return cfg.GoogleCredPath, nil
 	case "google_api_key":
 		return cfg.GoogleAPIKey, nil
+	case "google_client_id":
+		return cfg.GoogleClientID, nil
+	case "google_client_secret":
+		return cfg.GoogleClientSecret, nil
+	case "google_refresh_token":
+		return cfg.GoogleRefreshToken, nil
+	case "virustotal_api_key":
+		return cfg.VirusTotalAPIKey, nil
 	case "aws_profile":
 		return cfg.AWSProfile, nil
 	case "aws_region":
@@ -422,12 +459,14 @@ func (c *Config) Redacted() map[string]string {
 	}
 
 	return map[string]string{
-		"twitter_api_key":       redact(c.TwitterAPIKey),
-		"twitter_api_secret":    redact(c.TwitterAPISecret),
-		"twitter_access_token":  redact(c.TwitterAccessToken),
-		"twitter_access_secret": redact(c.TwitterAccessSecret),
+		"x_client_id":           redact(c.XClientID),
+		"x_access_token":        redact(c.XAccessToken),
+		"x_refresh_token":       redact(c.XRefreshToken),
+		"x_token_expiry":        c.XTokenExpiry,
 		"reddit_client_id":      redact(c.RedditClientID),
-		"reddit_client_secret":  redact(c.RedditClientSecret),
+		"reddit_access_token":   redact(c.RedditAccessToken),
+		"reddit_refresh_token":  redact(c.RedditRefreshToken),
+		"reddit_token_expiry":   c.RedditTokenExpiry,
 		"mastodon_server":       c.MastodonServer,
 		"mastodon_token":        redact(c.MastodonToken),
 		"youtube_api_key":       redact(c.YouTubeAPIKey),
@@ -445,6 +484,7 @@ func (c *Config) Redacted() map[string]string {
 		"smtp_port":             c.SMTPPort,
 		"github_token":          redact(c.GitHubToken),
 		"gitlab_token":          redact(c.GitLabToken),
+		"gitlab_url":            c.GitLabURL,
 		"linear_token":          redact(c.LinearToken),
 		"jira_url":              c.JiraURL,
 		"jira_email":            c.JiraEmail,
@@ -463,6 +503,10 @@ func (c *Config) Redacted() map[string]string {
 		"trello_token":          redact(c.TrelloToken),
 		"google_cred_path":      c.GoogleCredPath,
 		"google_api_key":        redact(c.GoogleAPIKey),
+		"google_client_id":      redact(c.GoogleClientID),
+		"google_client_secret":  redact(c.GoogleClientSecret),
+		"google_refresh_token":  redact(c.GoogleRefreshToken),
+		"virustotal_api_key":    redact(c.VirusTotalAPIKey),
 		"aws_profile":           c.AWSProfile,
 		"aws_region":            c.AWSRegion,
 		"spotify_client_id":     redact(c.SpotifyClientID),

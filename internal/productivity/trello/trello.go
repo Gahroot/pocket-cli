@@ -87,7 +87,7 @@ func NewClient(apiKey, token string) *Client {
 	return &Client{
 		apiKey: apiKey,
 		token:  token,
-		http:   &http.Client{},
+		http:   &http.Client{Timeout: 30 * time.Second},
 	}
 }
 
