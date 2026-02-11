@@ -42,7 +42,7 @@ func NewCommandsCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&group, "group", "g", "", "Filter by group: social, comms, dev, productivity, news, knowledge, utility, system, marketing")
+	cmd.Flags().StringVarP(&group, "group", "g", "", "Filter by group: social, comms, dev, productivity, news, knowledge, utility, system, security, marketing")
 
 	return cmd
 }

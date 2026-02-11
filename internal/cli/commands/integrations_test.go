@@ -74,6 +74,14 @@ var configKeysForIntegration = map[string][]string{
 	"facebook-ads": {"facebook_ads_token", "facebook_ads_account_id"},
 	"amazon-sp":    {"amazon_sp_client_id", "amazon_sp_client_secret", "amazon_sp_refresh_token", "amazon_sp_seller_id"},
 	"shopify":      {"shopify_store", "shopify_token"},
+	"spotify":      {"spotify_client_id", "spotify_client_secret"},
+	"sentry":       {"sentry_auth_token"},
+	"s3":           {"aws_profile", "aws_region"},
+	"redis":        {"redis_url"},
+	"prometheus":   {"prometheus_url"},
+	"virustotal":   {"virustotal_api_key"},
+	"gdrive":       {"google_api_key"},
+	"gsheets":      {"google_api_key"},
 }
 
 // TestAllAuthIntegrationsHaveStatusCheck verifies that every integration with

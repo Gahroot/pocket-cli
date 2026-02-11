@@ -237,6 +237,67 @@ var allIntegrations = []Integration{
 		Commands:    []string{"pocket dev vercel projects", "pocket dev vercel project [name]", "pocket dev vercel deployments [project]", "pocket dev vercel domains", "pocket dev vercel env [project]"},
 		SetupCmd:    "pocket setup show vercel",
 	},
+	{
+		ID:          "sentry",
+		Name:        "Sentry",
+		Group:       "dev",
+		Description: "Error tracking: projects, issues, and events from Sentry",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev sentry projects", "pocket dev sentry issues [project-slug]", "pocket dev sentry issue [issue-id]", "pocket dev sentry events [issue-id]"},
+		SetupCmd:    "pocket setup show sentry",
+	},
+	{
+		ID:          "s3",
+		Name:        "AWS S3",
+		Group:       "dev",
+		Description: "List buckets, browse objects, upload/download, and generate presigned URLs",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev s3 buckets", "pocket dev s3 ls [s3-path]", "pocket dev s3 get [s3-path] [local-path]", "pocket dev s3 put [local-path] [s3-path]", "pocket dev s3 presign [s3-path]"},
+		SetupCmd:    "pocket setup show s3",
+	},
+	{
+		ID:          "redis",
+		Name:        "Redis",
+		Group:       "dev",
+		Description: "Get/set keys, list keys, and view server info on Redis",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev redis get [key]", "pocket dev redis set [key] [value]", "pocket dev redis del [key...]", "pocket dev redis keys [pattern]", "pocket dev redis info"},
+		SetupCmd:    "pocket setup show redis",
+	},
+	{
+		ID:          "prometheus",
+		Name:        "Prometheus",
+		Group:       "dev",
+		Description: "PromQL queries, alerts, and scrape targets from Prometheus",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket dev prometheus query [promql]", "pocket dev prometheus range [promql]", "pocket dev prometheus alerts", "pocket dev prometheus targets"},
+		SetupCmd:    "pocket setup show prometheus",
+	},
+	// Dev - No Auth
+	{
+		ID:          "gist",
+		Name:        "GitHub Gists",
+		Group:       "dev",
+		Description: "Create, list, and read GitHub Gists",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket dev gist list", "pocket dev gist get [id]", "pocket dev gist create [content]"},
+	},
+	{
+		ID:          "kubernetes",
+		Name:        "Kubernetes",
+		Group:       "dev",
+		Description: "Pods, logs, deployments, services, and resource descriptions via kubectl",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket dev kube pods", "pocket dev kube logs [pod]", "pocket dev kube deployments", "pocket dev kube services", "pocket dev kube describe [resource] [name]"},
+	},
+	{
+		ID:          "database",
+		Name:        "Database (SQLite)",
+		Group:       "dev",
+		Description: "Query, inspect schema, and list tables in SQLite databases",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket dev db query [db-path] [sql]", "pocket dev db schema [db-path]", "pocket dev db tables [db-path]"},
+	},
 
 	// Social - Auth Required
 	{
@@ -274,6 +335,15 @@ var allIntegrations = []Integration{
 		AuthNeeded:  true,
 		Commands:    []string{"pocket social youtube search [query]", "pocket social youtube video [id]", "pocket social youtube channel [id]", "pocket social youtube videos [channel-id]", "pocket social youtube comments [video-id]", "pocket social youtube trending"},
 		SetupCmd:    "pocket setup show youtube",
+	},
+	{
+		ID:          "spotify",
+		Name:        "Spotify",
+		Group:       "social",
+		Description: "Search tracks, artists, and albums on Spotify",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket social spotify search [query]", "pocket social spotify track [id]", "pocket social spotify artist [id]", "pocket social spotify album [id]"},
+		SetupCmd:    "pocket setup show spotify",
 	},
 
 	// Communication - Auth Required
@@ -501,6 +571,96 @@ var allIntegrations = []Integration{
 		AuthNeeded:  false,
 		Commands:    []string{"pocket system mail accounts", "pocket system mail mailboxes", "pocket system mail list", "pocket system mail read [id]", "pocket system mail search [query]", "pocket system mail send", "pocket system mail unread", "pocket system mail count"},
 	},
+
+	// Security - Auth Required
+	{
+		ID:          "virustotal",
+		Name:        "VirusTotal",
+		Group:       "security",
+		Description: "Scan URLs, domains, IPs, and file hashes for threats via VirusTotal",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket security virustotal url [url]", "pocket security virustotal domain [domain]", "pocket security virustotal ip [ip]", "pocket security virustotal hash [hash]"},
+		SetupCmd:    "pocket setup show virustotal",
+	},
+	// Security - No Auth
+	{
+		ID:          "shodan",
+		Name:        "Shodan",
+		Group:       "security",
+		Description: "IP lookup for open ports and vulnerabilities via Shodan",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket security shodan lookup [ip]"},
+	},
+	{
+		ID:          "crtsh",
+		Name:        "crt.sh",
+		Group:       "security",
+		Description: "Certificate transparency log lookups via crt.sh",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket security crtsh lookup [domain]"},
+	},
+	{
+		ID:          "hibp",
+		Name:        "Have I Been Pwned",
+		Group:       "security",
+		Description: "Check passwords against breaches and list public data breaches",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket security hibp password [password]", "pocket security hibp breaches"},
+	},
+
+	// Productivity - Auth Required (Google API)
+	{
+		ID:          "gdrive",
+		Name:        "Google Drive",
+		Group:       "productivity",
+		Description: "Search and get file metadata from Google Drive",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket productivity gdrive search [query]", "pocket productivity gdrive info [file-id]"},
+		SetupCmd:    "pocket setup show google-api",
+	},
+	{
+		ID:          "gsheets",
+		Name:        "Google Sheets",
+		Group:       "productivity",
+		Description: "Read spreadsheets and search cell values in Google Sheets",
+		AuthNeeded:  true,
+		Commands:    []string{"pocket productivity gsheets get [spreadsheet-id]", "pocket productivity gsheets read [spreadsheet-id] [range]", "pocket productivity gsheets search [spreadsheet-id] [query]"},
+		SetupCmd:    "pocket setup show google-api",
+	},
+
+	// Utility - No Auth (additional)
+	{
+		ID:          "geocoding",
+		Name:        "Geocoding",
+		Group:       "utility",
+		Description: "Forward and reverse geocoding (address to coordinates and back)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility geocode forward [address]", "pocket utility geocode reverse [lat] [lon]"},
+	},
+	{
+		ID:          "timezone",
+		Name:        "Timezone",
+		Group:       "utility",
+		Description: "Get time in timezones, lookup timezone by IP, list all timezones",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility timezone get [timezone]", "pocket utility timezone ip [ip]", "pocket utility timezone list"},
+	},
+	{
+		ID:          "paste",
+		Name:        "Paste",
+		Group:       "utility",
+		Description: "Create and fetch text pastes (pastebin-like)",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility paste create [content]", "pocket utility paste get [url]"},
+	},
+	{
+		ID:          "netdiag",
+		Name:        "Network Diagnostics",
+		Group:       "utility",
+		Description: "HTTP headers, port scanning, and DNS/ping diagnostics",
+		AuthNeeded:  false,
+		Commands:    []string{"pocket utility netdiag headers [url]", "pocket utility netdiag ports [host]", "pocket utility netdiag ping [host]"},
+	},
 }
 
 func NewIntegrationsCmd() *cobra.Command {
@@ -549,7 +709,7 @@ func newIntListCmd() *cobra.Command {
 	}
 
 	cmd.Flags().BoolVar(&noAuth, "no-auth", false, "Only show integrations that don't need authentication")
-	cmd.Flags().StringVarP(&group, "group", "g", "", "Filter by group: news, knowledge, utility, dev, social, comms, productivity, system, marketing")
+	cmd.Flags().StringVarP(&group, "group", "g", "", "Filter by group: news, knowledge, utility, dev, social, comms, productivity, system, security, marketing")
 
 	return cmd
 }
@@ -595,6 +755,7 @@ func newIntGroupCmd() *cobra.Command {
 				"comms":        {Name: "Comms", Desc: "Email and messaging", Count: 0},
 				"productivity": {Name: "Productivity", Desc: "Calendar, tasks, notes", Count: 0},
 				"system":       {Name: "System", Desc: "macOS system integrations", Count: 0},
+				"security":     {Name: "Security", Desc: "Security scanning and threat intelligence", Count: 0},
 				"marketing":    {Name: "Marketing", Desc: "Ad platforms and marketing tools", Count: 0},
 			}
 
@@ -621,6 +782,7 @@ func newIntGroupCmd() *cobra.Command {
 				{ID: "comms", Name: groups["comms"].Name, Desc: groups["comms"].Desc, Count: groups["comms"].Count},
 				{ID: "productivity", Name: groups["productivity"].Name, Desc: groups["productivity"].Desc, Count: groups["productivity"].Count},
 				{ID: "system", Name: groups["system"].Name, Desc: groups["system"].Desc, Count: groups["system"].Count},
+				{ID: "security", Name: groups["security"].Name, Desc: groups["security"].Desc, Count: groups["security"].Count},
 				{ID: "marketing", Name: groups["marketing"].Name, Desc: groups["marketing"].Desc, Count: groups["marketing"].Count},
 			}
 
@@ -760,6 +922,42 @@ func getIntegrationStatus(cfg *config.Config, integ Integration) string {
 		store, _ := config.Get("shopify_store")
 		token, _ := config.Get("shopify_token")
 		if store != "" && token != "" {
+			return "ready"
+		}
+	case "spotify":
+		cid, _ := config.Get("spotify_client_id")
+		secret, _ := config.Get("spotify_client_secret")
+		if cid != "" && secret != "" {
+			return "ready"
+		}
+	case "sentry":
+		if v, _ := config.Get("sentry_auth_token"); v != "" {
+			return "ready"
+		}
+	case "s3":
+		profile, _ := config.Get("aws_profile")
+		region, _ := config.Get("aws_region")
+		if profile != "" && region != "" {
+			return "ready"
+		}
+	case "redis":
+		if v, _ := config.Get("redis_url"); v != "" {
+			return "ready"
+		}
+	case "prometheus":
+		if v, _ := config.Get("prometheus_url"); v != "" {
+			return "ready"
+		}
+	case "virustotal":
+		if v, _ := config.Get("virustotal_api_key"); v != "" {
+			return "ready"
+		}
+	case "gdrive":
+		if v, _ := config.Get("google_api_key"); v != "" {
+			return "ready"
+		}
+	case "gsheets":
+		if v, _ := config.Get("google_api_key"); v != "" {
 			return "ready"
 		}
 	}

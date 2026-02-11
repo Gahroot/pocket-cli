@@ -447,6 +447,126 @@ Optional - Set region (default: na):
 Note: The store name is the subdomain part of your .myshopify.com URL.`,
 		TestCommand: "pocket marketing shopify shop",
 	},
+	"spotify": {
+		Service: "spotify",
+		Name:    "Spotify",
+		Keys: []KeyInfo{
+			{Key: "spotify_client_id", Description: "OAuth Client ID", Required: true},
+			{Key: "spotify_client_secret", Description: "OAuth Client Secret", Required: true},
+		},
+		SetupGuide: `1. Go to https://developer.spotify.com/dashboard
+2. Log in and create a new app
+3. Set redirect URI to http://localhost:8767/callback
+4. Copy the Client ID and Client Secret
+5. Run:
+   pocket config set spotify_client_id <your-client-id>
+   pocket config set spotify_client_secret <your-client-secret>
+
+Note: Free Spotify account works for search. Premium needed for playback control.`,
+		TestCommand: "pocket social spotify search test -l 1",
+	},
+	"sentry": {
+		Service: "sentry",
+		Name:    "Sentry",
+		Keys: []KeyInfo{
+			{Key: "sentry_auth_token", Description: "Auth token with project:read, event:read scopes", Required: true},
+			{Key: "sentry_org", Description: "Organization slug (optional, used as default)", Required: false, Example: "my-org"},
+		},
+		SetupGuide: `1. Go to https://sentry.io/settings/account/api/auth-tokens/
+2. Click "Create New Token"
+3. Select scopes: project:read, event:read, org:read
+4. Copy the token
+5. Run: pocket config set sentry_auth_token <your-token>
+
+Optional - Set default org:
+   pocket config set sentry_org <your-org-slug>`,
+		TestCommand: "pocket dev sentry projects",
+	},
+	"virustotal": {
+		Service: "virustotal",
+		Name:    "VirusTotal",
+		Keys: []KeyInfo{
+			{Key: "virustotal_api_key", Description: "API key for VirusTotal", Required: true},
+		},
+		SetupGuide: `1. Sign up at https://www.virustotal.com/gui/join-us
+2. Go to https://www.virustotal.com/gui/my-apikey
+3. Copy your API key
+4. Run: pocket config set virustotal_api_key <your-api-key>
+
+Note: Free tier allows 4 lookups/min, 500/day.`,
+		TestCommand: "pocket security virustotal domain example.com",
+	},
+	"s3": {
+		Service: "s3",
+		Name:    "AWS S3",
+		Keys: []KeyInfo{
+			{Key: "aws_profile", Description: "AWS CLI profile name (from ~/.aws/credentials)", Required: true, Example: "default"},
+			{Key: "aws_region", Description: "AWS region", Required: true, Example: "us-east-1"},
+		},
+		SetupGuide: `1. Install AWS CLI: https://aws.amazon.com/cli/
+2. Run: aws configure --profile <profile-name>
+3. Enter your Access Key ID, Secret Access Key, and region
+4. Run:
+   pocket config set aws_profile <profile-name>
+   pocket config set aws_region <region>
+
+Note: Uses the AWS SDK credential chain. IAM permissions needed: s3:ListBucket, s3:GetObject, s3:PutObject.`,
+		TestCommand: "pocket dev s3 buckets",
+	},
+	"google-api": {
+		Service: "google-api",
+		Name:    "Google API (Drive/Sheets)",
+		Keys: []KeyInfo{
+			{Key: "google_api_key", Description: "Google API key with Drive and Sheets APIs enabled", Required: true, Example: "AIzaSy..."},
+		},
+		SetupGuide: `1. Go to https://console.cloud.google.com/
+2. Create a new project (or select existing)
+3. Enable these APIs:
+   - Google Drive API: https://console.cloud.google.com/apis/library/drive.googleapis.com
+   - Google Sheets API: https://console.cloud.google.com/apis/library/sheets.googleapis.com
+4. Go to Credentials > Create Credentials > API Key
+5. (Recommended) Restrict key to Drive and Sheets APIs
+6. Copy the API key
+7. Run: pocket config set google_api_key <your-api-key>
+
+Note: API key only allows access to publicly shared files. For private files, use OAuth (see calendar setup).`,
+		TestCommand: "pocket productivity gdrive search test",
+	},
+	"redis": {
+		Service: "redis",
+		Name:    "Redis",
+		Keys: []KeyInfo{
+			{Key: "redis_url", Description: "Redis connection URL", Required: true, Example: "redis://localhost:6379"},
+			{Key: "redis_password", Description: "Redis password (optional)", Required: false},
+		},
+		SetupGuide: `1. Get your Redis connection URL:
+   - Local: redis://localhost:6379
+   - Redis Cloud: redis://default:password@host:port
+   - Docker: redis://host.docker.internal:6379
+2. Run: pocket config set redis_url <your-redis-url>
+
+Optional - If password is separate:
+   pocket config set redis_password <your-password>
+
+Note: Supports Redis 6+ with AUTH.`,
+		TestCommand: "pocket dev redis info",
+	},
+	"prometheus": {
+		Service: "prometheus",
+		Name:    "Prometheus",
+		Keys: []KeyInfo{
+			{Key: "prometheus_url", Description: "Prometheus server URL", Required: true, Example: "http://localhost:9090"},
+			{Key: "prometheus_token", Description: "Bearer token for auth (optional)", Required: false},
+		},
+		SetupGuide: `1. Get your Prometheus server URL (e.g., http://localhost:9090)
+2. Run: pocket config set prometheus_url <your-prometheus-url>
+
+Optional - If authentication is required:
+   pocket config set prometheus_token <your-bearer-token>
+
+Note: Requires Prometheus HTTP API access (default port 9090).`,
+		TestCommand: "pocket dev prometheus targets",
+	},
 	"facebook-ads": {
 		Service: "facebook-ads",
 		Name:    "Facebook Ads (Meta)",
