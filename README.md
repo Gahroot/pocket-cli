@@ -29,12 +29,12 @@ One command. That's it.
 
 **macOS / Linux:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Gahroot/agent-cli/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Gahroot/pocket-cli/main/scripts/install.sh | bash
 ```
 
 **Windows (PowerShell):**
 ```powershell
-irm https://raw.githubusercontent.com/Gahroot/agent-cli/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/Gahroot/pocket-cli/main/scripts/install.ps1 | iex
 ```
 
 Works on **macOS** (Intel & Apple Silicon), **Linux**, and **Windows**.
